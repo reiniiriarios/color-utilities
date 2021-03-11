@@ -26,9 +26,10 @@ class Harmony {
      * @return string[] [RRGGBB, RRGGBB, RRGGBB]
      */
     public static function Analogous($color, $angle = 30) {
+        Util::value_range_check($angle, 0, 360);
+
         $color = Convert::color2str($color);
         $angle = floatval($angle);
-        static::sanity_check_angle($angle);
 
         $hsv = Convert::hex2hsv($color);
         $hsv_analogous1_hue = Convert::hue_shift($hsv[0], $angle);
@@ -69,9 +70,10 @@ class Harmony {
      * @return string[] [RRGGBB, RRGGBB, RRGGBB, RRGGBB]
      */
     public static function Tetradic($color, $angle = 45) {
+        Util::value_range_check($angle, 0, 360);
+        
         $color = Convert::color2str($color);
         $angle = floatval($angle);
-        static::sanity_check_angle($angle);
 
         $hsv = Convert::hex2hsv($color);
         $hsv_2_hue = Convert::hue_shift($hsv[0], $angle);
@@ -93,17 +95,5 @@ class Harmony {
      */
     public static function Square($color) {
         return static::Tetradic($color, 90); // same algorithm used
-    }
-
-    /**
-     * Check that $angle is a valid value
-     *
-     * @param mixed $angle
-     * @throws \UnexpectedValueException
-     */
-    private static function sanity_check_angle($angle) {
-        if ($angle <= 0 || $angle >= 360) {
-            throw new \UnexpectedValueException('Angle must be float|int between 0 and 360');
-        }
     }
 }
