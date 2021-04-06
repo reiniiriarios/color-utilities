@@ -47,7 +47,7 @@ class Util {
      * @return string RRGGBB
      */
     public static function color2hexstr($color) {
-        $color = self::color2int($color);
+        $color = self::color2hexint($color);
         $color = dechex($color);
 
         return $color;
@@ -130,11 +130,11 @@ class Util {
 
                 $minors[$row_n][$col_n] = $matrix[$ax][$ay] * $matrix[$dx][$dy] - $matrix[$bx][$by] * $matrix[$cx][$cy];
                 if ($flip_sign) {
-                    $cofactor = $minor_cell * -1;
+                    $cofactor = $minors[$row_n][$col_n] * -1;
                     $flip_sign = false;
                 }
                 else {
-                    $cofactor = $minor_cell;
+                    $cofactor = $minors[$row_n][$col_n];
                     $flip_sign = true;
                 }
                 $cofactors[$row_n][$col_n] = $cofactor;
@@ -150,7 +150,7 @@ class Util {
         $adjugate[1][2] = $cofactors[2][1];
         $adjugate[2][1] = $cofactors[1][2];
 
-        // Determinant of matrix $t
+        // Determinant of matrix
         $determinant = $minors[0][0] * $cofactors[0][0] + $minors[0][1] * $cofactors[0][1] + $minors[0][2] * $cofactors[0][2];
 
         // Calculate inverse matrix

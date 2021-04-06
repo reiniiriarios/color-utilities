@@ -294,7 +294,7 @@ class Convert {
                     $b = $p;
                     break;
                 case 2:
-                    $r = $q;
+                    $r = $p;
                     $g = $value;
                     $b = $t;
                     break;
@@ -380,8 +380,8 @@ class Convert {
      * @return float[]|int[] hue, saturation, intensity
      */
     public static function hsv2hsi($hue, $saturation, $value, $round=true) {
-        list($r, $g, $b) = hsv2rgb($hue, $saturation, $value, false);
-        return rgb2hsi($r, $g, $b, $round);
+        list($r, $g, $b) = self::hsv2rgb($hue, $saturation, $value, false);
+        return self::rgb2hsi($r, $g, $b, $round);
     }
 
     /**
@@ -516,8 +516,8 @@ class Convert {
      * @return float[]|int[] hue, saturation, intensity
      */
     public static function hsl2hsi($hue, $saturation, $lightness, $round=true) {
-        list($r, $g, $b) = hsl2rgb($hue, $saturation, $lightness, false);
-        return rgb2hsi($r, $g, $b, $round);
+        list($r, $g, $b) = self::hsl2rgb($hue, $saturation, $lightness, false);
+        return self::rgb2hsi($r, $g, $b, $round);
     }
 
     /**
@@ -622,8 +622,8 @@ class Convert {
      * @return float[]|int[] hue, saturation, value
      */
     public static function hsi2hsv($hue, $saturation, $intensity, $round=true) {
-        list($r, $g, $b) = hsi2rgb($hue, $saturation, $intensity, false);
-        return rgb2hsv($r, $g, $b, $round);
+        list($r, $g, $b) = self::hsi2rgb($hue, $saturation, $intensity, false);
+        return self::rgb2hsv($r, $g, $b, $round);
     }
 
     /**
@@ -639,8 +639,8 @@ class Convert {
      * @return float[]|int[] hue, saturation, lightness
      */
     public static function hsi2hsl($hue, $saturation, $intensity, $round=true) {
-        list($r, $g, $b) = hsi2rgb($hue, $saturation, $intensity, false);
-        return rgb2hsl($r, $g, $b, $round);
+        list($r, $g, $b) = self::hsi2rgb($hue, $saturation, $intensity, false);
+        return self::rgb2hsl($r, $g, $b, $round);
     }
     
     /////////////////////// CMYK ////////////////////////
@@ -868,6 +868,9 @@ class Convert {
             'smptec'         => 'smptecrgb',
             'widegamut'      => 'widegamutrgb',
         ];
+        if (!empty($conform[$color_space])) {
+            $color_space = $conform[$color_space];
+        }
 
         if (empty(Reference::COLOR_SPACES[$color_space]['rgb2xyz'][$reference_white])) {
             throw new Exception \UnexpectedValueException('Transformation matrix unavailable for this color space and reference white');
@@ -889,9 +892,9 @@ class Convert {
         }
         else {
             // Gamma
-            $r = pow($r, $spaces[$color_space]['gamma']);
-            $g = pow($g, $spaces[$color_space]['gamma']);
-            $b = pow($b, $spaces[$color_space]['gamma']);
+            $r = pow($red,   Reference::COLOR_SPACES[$color_space]['gamma']);
+            $g = pow($green, Reference::COLOR_SPACES[$color_space]['gamma']);
+            $b = pow($blue,  Reference::COLOR_SPACES[$color_space]['gamma']);
         }
         
         // [X]           [R]
@@ -963,9 +966,9 @@ class Convert {
         }
         else {
             // Gamma
-            $r = pow($r, 1 / $spaces[$color_space]['gamma']);
-            $g = pow($g, 1 / $spaces[$color_space]['gamma']);
-            $b = pow($b, 1 / $spaces[$color_space]['gamma']);
+            $r = pow($r, 1 / Reference::COLOR_SPACES[$color_space]['gamma']);
+            $g = pow($g, 1 / Reference::COLOR_SPACES[$color_space]['gamma']);
+            $b = pow($b, 1 / Reference::COLOR_SPACES[$color_space]['gamma']);
         }
         
         // $w = Reference::STD_ILLUMINANTS[$reference_white]['vector'];
@@ -1944,9 +1947,9 @@ class Convert {
 
         if ($color_depth != 255) {
             // Equations use RGB values between 0 and 255
-            $r = $red / 255 * $color_depth;
-            $g = $green / 255 * $color_depth;
-            $b = $blue / 255 * $color_depth;
+            $r = $r / 255 * $color_depth;
+            $g = $g / 255 * $color_depth;
+            $b = $b / 255 * $color_depth;
         }
 
         if ($round) {
@@ -2011,10 +2014,10 @@ class Convert {
         if ($wavelength >= 380 && $wavelength < 420) {
             $factor = 0.3 + 0.7 * ($wavelength - 380) / (420 - 380);
         }
-        else if ($wavelength >= 420 && $wavelength < 701) {
+        elseif ($wavelength >= 420 && $wavelength < 701) {
             $factor = 1;
         }
-        if ($wavelength >= 701 && $wavelength < 781) {
+        elseif ($wavelength >= 701 && $wavelength < 781) {
             $factor = 0.3 + 0.7 * (780 - $wavelength) / (780 - 700);
         }
         else {

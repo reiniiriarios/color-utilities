@@ -12,7 +12,7 @@ class Harmony {
         $color = Convert::color2str($color);
 
         $hsv = Convert::hex2hsv($color);
-        $hsv_complement_hue = Convert::hue_shift($hsv[0], 180);
+        $hsv_complement_hue = Modify::hue_shift($hsv[0], 180);
         $rgb_complement = Convert::hsv2hex($hsv_complement_hue, $hsv[1], $hsv[2]);
 
         return $rgb_complement;
@@ -32,8 +32,8 @@ class Harmony {
         $angle = floatval($angle);
 
         $hsv = Convert::hex2hsv($color);
-        $hsv_analogous1_hue = Convert::hue_shift($hsv[0], $angle);
-        $hsv_analogous2_hue = Convert::hue_shift($hsv[0], $angle * -1);
+        $hsv_analogous1_hue = Modify::hue_shift($hsv[0], $angle);
+        $hsv_analogous2_hue = Modify::hue_shift($hsv[0], $angle * -1);
 
         $rgb_analogous1 = Convert::hsv2hex($hsv_analogous1_hue, $hsv[1], $hsv[2]);
         $rgb_analogous2 = Convert::hsv2hex($hsv_analogous2_hue, $hsv[1], $hsv[2]);
@@ -73,12 +73,11 @@ class Harmony {
         Util::value_range_check($angle, 0, 360);
         
         $color = Convert::color2str($color);
-        $angle = floatval($angle);
 
         $hsv = Convert::hex2hsv($color);
-        $hsv_2_hue = Convert::hue_shift($hsv[0], $angle);
-        $hsv_3_hue = Convert::hue_shift($hsv[0], $angle + 180);
-        $hsv_4_hue = Convert::hue_shift($hsv[0], 180);
+        $hsv_2_hue = Modify::hue_shift($hsv[0], $angle);
+        $hsv_3_hue = Modify::hue_shift($hsv[0], $angle + 180);
+        $hsv_4_hue = Modify::hue_shift($hsv[0], 180);
 
         $rgb_2 = Convert::hsv2hex($hsv_2_hue, $hsv[1], $hsv[2]);
         $rgb_3 = Convert::hsv2hex($hsv_3_hue, $hsv[1], $hsv[2]);
