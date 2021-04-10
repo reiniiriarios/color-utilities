@@ -1,6 +1,8 @@
 # color-utilities
 
-Miscellaneous color scheme and conversion utilities
+Miscellaneous color scheme and conversion utilities.
+
+** No longer well-maintained. See [chromaticity-color-utilities](https://github.com/reiniiriarios/chromaticity-color-utilities) for Node.js **
 
 ## Tools
 
